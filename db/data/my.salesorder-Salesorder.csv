@@ -1,6 +1,6 @@
-ID,salesordernum,addline2,addline1,city,state,country,zipcode;
-A10112,101661,6977 McNeil Drive, Apt#335, Austin,TX,USA,60115;
-A10121,101662,7972 Prospect Drive, Apt#224, Dallas,ND,USA,70445;
-A10132,101663,8977 Dumont Drive, Apt#654, Hoston,FT,USA,98665;
-A10141,101664,3978 Pastor Drive, Apt#887, Memphis,PA,USA,10114;
-A10151,101665,2974 Falmuth Drive, , Belford,PA,USA,66224;
+ID;salesordernum;addline1;addline2;city;state;country;zipcode
+A10112;101661;6977 McNeil Drive;Apt#335;Austin;TX;USA;60115
+A10121;101662;7972 Prospect Drive;Apt#224;Dallas;ND;USA;70445
+A10132;101663;8977 Dumont Drive;Apt#654;Hoston;FT;USA;98665
+A10141;101664;3978 Pastor Drive;Apt#887;Memphis;PA;USA;10114
+A10151;101665;2974 Falmuth Drive; ;Belford;PA;USA;66224
