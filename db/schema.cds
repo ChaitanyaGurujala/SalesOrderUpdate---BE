@@ -2,6 +2,7 @@ namespace my.salesorder;
 
 entity Salesorder {
   key ID            : String;
+      customerName  : String;
       salesordernum : Integer;
       addline1      : String;
       addline2      : String;
