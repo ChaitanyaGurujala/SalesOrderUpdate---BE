@@ -6,9 +6,11 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@cap-js/hana": "^1",
     "@sap/cds": "^8",
+    "@sap/xssec": "^4.2.3",
     "express": "^4",
-    "@cap-js/hana": "^1"
+    "passport": "^0.7.0"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.6",
@@ -17,5 +19,14 @@
   },
   "scripts": {
     "start": "cds-serve"
+  },
+  "cds": {
+    "requires": {
+      "auth": "mocked",
+      "db": {
+        "kind": "hana"
+      }
+    }
   }
+
 }
