@@ -3,91 +3,95 @@ ID: salesorderupdate-BE
 description: A simple CAP project.
 version: 1.0.0
 modules:
-- name: salesorderupdate-BE-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: salesorderupdate-BE-db
-  provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
-  parameters:
-    buildpack: nodejs_buildpack
-    readiness-health-check-http-endpoint: /health
-    readiness-health-check-type: http
-  build-parameters:
-    builder: npm
-- name: salesorderupdate-BE-db-deployer
-  type: hdb
-  path: gen/db
-  requires:
-  - name: salesorderupdate-BE-db
-  parameters:
-    buildpack: nodejs_buildpack
-- name: salesorderupdate-BE-destination-content
-  type: com.sap.application.content
-  requires:
-  - name: salesorderupdate-BE-destination-service
+  - name: salesorderupdate-BE-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: salesorderupdate-BE-db
+      - name: uaa_salesorderupdate-BE
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
     parameters:
-      content-target: true
-  - name: salesorderupdate-BE_html_repo_host
+      buildpack: nodejs_buildpack
+      readiness-health-check-http-endpoint: /health
+      readiness-health-check-type: http
+    build-parameters:
+      builder: npm
+  - name: salesorderupdate-BE-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: salesorderupdate-BE-db
     parameters:
-      service-key:
-        name: salesorderupdate-BE_html_repo_host-key
-  - name: uaa_salesorderupdate-BE
+      buildpack: nodejs_buildpack
+  - name: salesorderupdate-BE-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: salesorderupdate-BE-destination-service
+        parameters:
+          content-target: true
+      - name: salesorderupdate-BE_html_repo_host
+        parameters:
+          service-key:
+            name: salesorderupdate-BE_html_repo_host-key
+      - name: uaa_salesorderupdate-BE
+        parameters:
+          service-key:
+            name: uaa_salesorderupdate-BE-key
     parameters:
-      service-key:
-        name: uaa_salesorderupdate-BE-key
-  parameters:
-    content:
-      instance:
-        destinations:
-        - Name: salesorderupdaterouter_salesorderupdate_BE_html_repo_host
-          ServiceInstanceName: salesorderupdate-BE-html5-app-host-service
-          ServiceKeyName: salesorderupdate-BE_html_repo_host-key
-          sap.cloud.service: salesorderupdaterouter
-        - Authentication: OAuth2UserTokenExchange
-          Name: salesorderupdaterouter_uaa_salesorderupdate_BE
-          ServiceInstanceName: salesorderupdate-BE-xsuaa-service
-          ServiceKeyName: uaa_salesorderupdate-BE-key
-          sap.cloud.service: salesorderupdaterouter
-        existing_destinations_policy: ignore
-  build-parameters:
-    no-source: true
+      content:
+        instance:
+          destinations:
+            - Name: salesorderupdaterouter_salesorderupdate_BE_html_repo_host
+              ServiceInstanceName: salesorderupdate-BE-html5-app-host-service
+              ServiceKeyName: salesorderupdate-BE_html_repo_host-key
+              sap.cloud.service: salesorderupdaterouter
+            - Authentication: OAuth2UserTokenExchange
+              Name: salesorderupdaterouter_uaa_salesorderupdate_BE
+              ServiceInstanceName: salesorderupdate-BE-xsuaa-service
+              ServiceKeyName: uaa_salesorderupdate-BE-key
+              sap.cloud.service: salesorderupdaterouter
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
 resources:
-- name: salesorderupdate-BE-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
-- name: salesorderupdate-BE-destination-service
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      HTML5Runtime_enabled: true
-      version: 1.0.0
-    service: destination
-    service-name: salesorderupdate-BE-destination-service
-    service-plan: lite
-- name: salesorderupdate-BE_html_repo_host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-name: salesorderupdate-BE-html5-app-host-service
-    service-plan: app-host
-- name: uaa_salesorderupdate-BE
-  type: org.cloudfoundry.managed-service
-  parameters:
-    path: ./xs-security.json
-    service: xsuaa
-    service-name: salesorderupdate-BE-xsuaa-service
-    service-plan: application
+  - name: salesorderupdate-BE-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: salesorderupdate-BE-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        version: 1.0.0
+      service: destination
+      service-name: salesorderupdate-BE-destination-service
+      service-plan: lite
+  - name: salesorderupdate-BE_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: salesorderupdate-BE-html5-app-host-service
+      service-plan: app-host
+  - name: uaa_salesorderupdate-BE
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-name: salesorderupdate-BE-xsuaa-service
+      service-plan: application
+      config:
+        xsappname: salesorderupdate-BE-${org}-${space}
+        tenant-mode: dedicated
 parameters:
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-  - builder: custom
-    commands:
-    - npm ci
-    - npx cds build --production
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production

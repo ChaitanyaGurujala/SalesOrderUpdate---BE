@@ -8,7 +8,7 @@
   "dependencies": {
     "@cap-js/hana": "^1",
     "@sap/cds": "^8",
-    "@sap/xssec": "^4.2.3",
+    "@sap/xssec": "^4",
     "express": "^4",
     "passport": "^0.7.0"
   },
@@ -28,5 +28,4 @@
       }
     }
   }
-
 }
